@@ -1,0 +1,84 @@
+
+import java.util.ArrayList;
+
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Scanner;
+
+import java.util.TreeSet;
+
+
+//import java.util.Scanner;
+
+public class Solution {
+	static int[][] matrix;
+    public static void main(String args[] ) throws Exception {
+    	Scanner sc = new Scanner(System.in);
+    	int row=sc.nextInt();
+    	int col= sc.nextInt();
+    	 matrix= new int[row][col];
+    	for(int i =0;i<row;i++){
+    		for(int j=0;j<col;j++)
+    			matrix[i][j]=sc.nextInt();
+    	}
+    	List<String>path=robotPaths(row,col);
+    	//int size=path.size();
+    	TreeSet<String> hs=new TreeSet<String>();
+    	ListIterator<String> it=path.listIterator();
+    //	int l=0;
+    	while(it.hasNext()){
+    		String s= it.next();
+    		//System.out.println(s);
+    		hs.add(getSide(s));
+    		
+    	}
+    	System.out.println(hs.first());
+    }
+     static String getSide(String s){
+    	String[] temp1=s.split(" ");
+    	int[] arr=new int[temp1.length];
+    	for(int i=0;i<temp1.length;i++){
+    		String[] c=temp1[i].split("\\;");
+    		int r=Integer.parseInt(c[0]);
+    		int col=Integer.parseInt(c[1]);
+    		arr[i]=matrix[r-1][col-1];
+    		  		
+    	}
+    	
+    	return sort(arr);
+    }
+     static String sort(int []arr){
+    	 for (int i = 1; i < arr.length; i++) {
+             int valueToSort = arr[i];
+             int j = i;
+             while (j > 0 && arr[j - 1] > valueToSort) {
+                 arr[j] = arr[j - 1];
+                 j--;
+             }
+             arr[j] = valueToSort;
+         }
+    	 String p = "";
+    	 for(int k=0;k<arr.length;k++)
+    		 p=p+Integer.toString(arr[k]);
+    	 //System.out.println(p);
+    	 
+		return p;
+    	 
+     }
+     static List<String> robotPaths(int n,int m){
+        List<String> pathList = new ArrayList<String>();
+        getPaths(n,m, 1,1, "", pathList);
+        return pathList;
+    }
+     static void getPaths(int n,int m, int i, int j, String path, List<String> pathList){
+        path += i+";"+j+" ";
+        if( i ==n && j == m){ //reach the (n,n) point
+            pathList.add(path);
+        }else if( i > n || j > m){//wrong way
+            return;
+        }else {
+            getPaths(n,m, i +1, j , path, pathList);
+            getPaths(n,m, i , j +1, path, pathList);
+        }
+    }
+}
